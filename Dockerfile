@@ -26,20 +26,26 @@ COPY --from=build-hapi /tmp/hapi-fhir-jpaserver-starter/target/*.war /usr/local/
 
 RUN apt-get update && apt-get install gettext-base -y
 
-ARG DATABASE=empty
-ARG IP=127.0.0.1
-ARG PORT=8080
+# MySQL Database Connection Settings
+ARG MYSQL_HOST=127.0.0.1
+ARG MYSQL_PORT=3306
+ARG MYSQL_DATABASE=hapi_fhir
+ARG MYSQL_USER=root
+ARG MYSQL_PASSWORD=secret
+
+ENV MYSQL_HOST=$MYSQL_HOST
+ENV MYSQL_PORT=$MYSQL_PORT
+ENV MYSQL_DATABASE=$MYSQL_DATABASE
+ENV MYSQL_USER=$MYSQL_USER
+ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
+
+# Other environment variables
 ARG FHIR_VERSION=R4
 ARG JAVA_OPTS=-Dhapi.properties=/config/hapi.properties
 
 ENV JAVA_OPTS=$JAVA_OPTS
-ENV IP=$IP
-ENV PORT=$PORT
 ENV FHIR_VERSION=$FHIR_VERSION
-ENV DATABASE=$DATABASE
-ENV HOST=localhost
 
-COPY ./databases/${DATABASE}/ /usr/local/tomcat/target/database/
 COPY ./server.xml  /tmp/server.xml
 
 RUN mkdir /config
