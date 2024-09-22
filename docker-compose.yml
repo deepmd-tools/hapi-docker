@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  hapi-fhir:
+    image: hapiproject/hapi:v5.0.0  # Specify the version or use 'latest'
+    container_name: hapi-fhir
+    environment:
+      FHIR_VERSION: R4
+      MYSQL_HOST: host.docker.internal  # Special Docker DNS name to connect to the host machine's MySQL
+      MYSQL_PORT: 3306                  # Default MySQL port
+      MYSQL_DATABASE: hapi_fhir         # Database name for HAPI FHIR
+      MYSQL_USER: hapiuser              # MySQL user for HAPI FHIR
+      MYSQL_PASSWORD: hapipassword      # Password for the MySQL user
+      JAVA_OPTS: "-Dhapi.properties=/config/hapi.properties"
+    volumes:
+      - ./hapi.properties:/tmp/hapi.properties
+    ports:
+      - "8888:8080"  # Expose HAPI FHIR on port 8080 to the host
+    command: /bin/sh -c "envsubst < /tmp/hapi.properties.tpl > /config/hapi.properties && catalina.sh run"
+
+volumes:
+  hapi_data:
