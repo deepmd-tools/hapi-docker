@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   hapi-fhir:
-    image: hapiproject/hapi:v5.0.0  # Specify the version or use 'latest'
+    image: anilyerramasu/hapi-llm:v5.0.0  # Specify the version or use 'latest'
     container_name: hapi-fhir
     environment:
       FHIR_VERSION: R4
